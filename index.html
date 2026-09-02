@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zia — AI egészség coach és dietetikus, ha kérdésed van | MEROVA Health</title>
+<meta name="description" content="Zia egy fotóból naplóz, számol és minden nap érthetően visszajelez. Ha ennél több kell, megosztod a naplód Borival, a dietetikusunkkal — és személyesen válaszol. IR, PCOS, 2-es típusú cukorbetegség, GLP-1 mellett." />
+<meta property="og:title" content="Egy dietetikus, ha kérdésed van. Egy AI coach, ami minden nap visszajelez." />
+<meta property="og:description" content="Zia egy fotóból naplóz és minden nap érthetően visszajelez. Bori, a dietetikusunk pedig személyesen válaszol a megosztott naplód alapján." />
+<meta property="og:image" content="https://zia-landing-merova.vercel.app/assets/img/hero/hero-zia.jpg" />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --head:'Fraunces',Georgia,serif; --body:'Onest',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --midnight:#0A3E41; --midnight-2:#0E5155; --teal:#1BA4AC; --teal-d:#12777D; --teal-ul:#F0F9F9; --teal-l:#D9F1F2;
+  --coral:#EC5B13; --coral-d:#A23D0B; --coral-m:#F7996E; --coral-l:#FCE4D9; --coral-ul:#FEF5F1;
+  --emerald:#278641; --emerald-l:#E0F5E6; --emerald-ul:#F2FDF4; --emerald-bd:#B8E4C0;
+  /* a sárga (pear) kivezetve — világos teal lépett a helyére */
+  --pear:#D9F1F2; --pear-d:#12777D; --pear-ul:#F0F9F9; --pear-l:#D9F1F2;
+  --accent-dark:#F7996E; /* meleg akcent sötét háttéren */
+  --ink:#1A2B2C; --grey-d:#607071; --grey-m:#B0BFBF; --grey-l:#E5E2E1; --grey-ul:#F8F7F7; --off:#FAFAF7;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--body);color:var(--ink);background:#fff;line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--head);color:var(--midnight);margin:0;font-weight:600;letter-spacing:0;line-height:1.14;font-variation-settings:'opsz' 60}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{width:min(1080px,90vw);margin:0 auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;font-weight:700;font-size:16px;padding:17px 34px;transition:all .3s;cursor:pointer;border:none;font-family:var(--body);text-align:center}
+.btn-coral{background:var(--coral);color:#fff}
+.btn-coral:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(236,91,19,.28)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(27,164,172,.32)}
+.btn-ghost{background:transparent;border:2px solid var(--grey-l);color:var(--midnight)}
+.btn-ghost:hover{border-color:var(--midnight);background:var(--teal-ul)}
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--coral-d);margin:0 0 12px}
+.eyebrow::before{content:"";height:1.5px;width:20px;background:var(--coral-d)}
+h2.sec{text-align:center;font-size:clamp(26px,3.5vw,38px);font-weight:600;margin-bottom:10px}
+h2.sec em{font-style:normal;color:var(--coral)}
+.sec-lead{max-width:640px;margin:0 auto 30px;text-align:center;color:var(--grey-d);font-size:16.5px}
+.micro{font-size:12.5px;color:var(--grey-m);line-height:1.6}
+section.blk{padding:clamp(46px,5.4vw,70px) 0}
+.bg-off{background:var(--off)} .bg-white{background:#fff} .bg-teal{background:var(--teal-ul)}
+
+/* TOP VALUE STRIP */
+.top-strip{background:var(--midnight);color:#fff}
+.top-strip .in{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 18px;padding:11px 0;font-size:13.5px;font-weight:600;text-align:center}
+.top-strip .hl{color:var(--pear);font-weight:800}
+.top-strip .dot{color:rgba(255,255,255,.32)}
+@media(max-width:600px){.top-strip .in .opt{display:none}}
+
+/* NAV */
+header.nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--grey-l)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;padding:13px 0}
+.nav-in .zia{height:25px;width:auto;display:block}
+.nav-links{display:flex;align-items:center;gap:24px;font-size:14px;font-weight:600;color:var(--grey-d)}
+.nav-links a:hover{color:var(--midnight)}
+.nav .btn{padding:10px 20px;font-size:14px}
+@media(max-width:900px){.nav-links a:not(.btn){display:none}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;background:linear-gradient(to bottom,#FAFAF7,var(--teal-ul) 58%,#FFF9EE);padding:34px 0 46px}
+.hero::before{content:"";position:absolute;right:-220px;top:-220px;width:740px;height:740px;border-radius:50%;background:radial-gradient(circle,rgba(27,164,172,.10),transparent 62%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;position:relative}
+@media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:18px}.hero-shot{order:-1}}
+.badges{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+.badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:7px 14px;border-radius:999px}
+.badge.coral{border:1px solid rgba(236,91,19,.25);background:rgba(236,91,19,.09);color:var(--coral-d)}
+.badge.teal{border:1px solid rgba(27,164,172,.28);background:rgba(27,164,172,.10);color:var(--teal-d)}
+.badge.teal .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pulse 1.7s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{font-size:clamp(28px,3.6vw,41px);margin-bottom:13px;line-height:1.12}
+.hero h1 .hl{color:var(--coral)}
+.hero h1 .kicker{display:block;font-size:.5em;font-weight:500;color:var(--teal-d);margin-bottom:10px;line-height:1.3}
+.hero .lead{max-width:520px;font-size:15.5px;font-weight:500;line-height:1.6;color:var(--ink);margin:0 0 20px}
+.hero .lead b{color:var(--midnight)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:13px;align-items:center}
+@media(max-width:880px){.hero-cta .btn{width:100%}}
+.hero-note{margin:14px 0 0;font-size:13px;color:var(--grey-d);font-weight:600}
+.hero-note b{color:var(--teal-d)}
+.hero-shot img{display:block;width:100%;max-width:580px;margin:0 auto;mix-blend-mode:multiply;filter:contrast(1.08) brightness(1.05);-webkit-mask-image:linear-gradient(to bottom,#000 94%,transparent 99.5%);mask-image:linear-gradient(to bottom,#000 94%,transparent 99.5%)}
+.hero-benefits{position:relative;z-index:1;margin-top:32px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.hero-benefits{grid-template-columns:1fr 1fr;gap:13px}}
+@media(max-width:540px){.hero-benefits{grid-template-columns:1fr}}
+.hbx{background:#fff;border:1px solid var(--grey-l);border-radius:16px;padding:16px;box-shadow:0 4px 18px rgba(10,62,65,.06)}
+.hbx .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:var(--teal-ul);border:1px solid var(--teal-l);margin-bottom:12px}
+.hbx b{display:block;font-size:15px;color:var(--midnight);font-weight:700;line-height:1.25;margin-bottom:6px}
+.hbx .d{font-size:13.5px;color:var(--grey-d);line-height:1.5}
+
+/* SOCIAL PROOF */
+.proof{border-bottom:1px solid var(--grey-l);background:#fff;padding:20px 0}
+.proof-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(24px,5vw,56px)}
+.proof .st{text-align:center}
+.proof .st .n{font-family:var(--head);font-size:28px;font-weight:700;color:var(--midnight)}
+.proof .st .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--grey-m)}
+
+/* PAIN CARDS */
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:960px;margin:0 auto}
+@media(max-width:820px){.pain-grid{grid-template-columns:1fr}}
+.pcard{background:#fff;border:1px solid var(--grey-l);border-radius:18px;padding:24px;box-shadow:0 3px 16px rgba(10,62,65,.05)}
+.pcard .ic{font-size:26px;display:block;margin-bottom:10px}
+.pcard b{display:block;font-family:var(--head);font-size:17px;color:var(--midnight);margin-bottom:6px;font-weight:600}
+.pcard p{margin:0;font-size:14px;color:var(--grey-d);line-height:1.6}
+.pain-out{max-width:760px;margin:32px auto 0;text-align:center;background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:18px;padding:22px 26px}
+.pain-out p{margin:0;font-family:var(--head);font-size:clamp(17px,2.2vw,21px);color:var(--midnight);line-height:1.45;font-weight:500}
+.pain-out p b{color:var(--coral-d);font-weight:700}
+
+/* HOW IT WORKS */
+.how-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:48px;align-items:center;margin-top:36px}
+@media(max-width:880px){.how-grid{grid-template-columns:1fr;gap:28px}}
+.how-media img{display:block;width:100%;max-width:440px;margin:0 auto;filter:drop-shadow(0 20px 50px rgba(10,62,65,.12))}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--grey-l);border-radius:16px;padding:14px 18px}
+.step .num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--midnight);color:var(--pear);font-family:var(--head);font-weight:700;display:grid;place-items:center;font-size:16px}
+.step b{color:var(--midnight);font-size:15.5px}
+.step p{margin:3px 0 0;font-size:14px;color:var(--grey-d);line-height:1.55}
+.steps-wrap{max-width:720px;margin:0 auto}
+
+/* APP SHOWCASE (GIF cards) */
+.showcase{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:940px;margin:0 auto}
+@media(max-width:760px){.showcase{grid-template-columns:1fr}}
+.scard{display:flex;gap:16px;align-items:center;background:#fff;border:1px solid var(--grey-l);border-radius:20px;padding:16px;box-shadow:0 4px 20px rgba(10,62,65,.06);transition:.3s}
+.scard:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(10,62,65,.1)}
+.scard .media{flex:none;width:126px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:var(--midnight);box-shadow:0 8px 24px rgba(10,62,65,.14)}
+.scard .media img{width:100%;height:100%;object-fit:cover;display:block}
+.scard .body h4{font-family:var(--head);font-size:19px;font-weight:700;color:var(--coral-d);margin:0 0 7px;line-height:1.2}
+.scard .body p{margin:0;font-size:13.5px;color:var(--grey-d);line-height:1.55}
+@media(max-width:500px){.scard{flex-direction:column;text-align:center}.scard .media{width:150px}}
+
+/* APP GRID / VIDEO */
+.app-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:50px;align-items:center}
+@media(max-width:880px){.app-grid{grid-template-columns:1fr;gap:30px}}
+.app-feats{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:16px}
+.app-feats li{display:flex;gap:14px;align-items:flex-start}
+.app-feats .ic{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:var(--coral-ul);border:1px solid var(--coral-l)}
+.app-feats b{display:block;font-size:15.5px;color:var(--midnight)}
+.app-feats p{margin:2px 0 0;font-size:14px;color:var(--grey-d);line-height:1.55}
+.hero-vid{width:100%;max-width:520px;margin:0 auto}
+.vframe{position:relative;width:100%;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:var(--midnight);box-shadow:0 24px 64px rgba(10,62,65,.22)}
+.vframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vtag{position:absolute;left:14px;top:14px;background:var(--coral);color:#fff;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:6px 13px;border-radius:999px;z-index:2}
+.vcap{margin-top:12px;text-align:center;font-size:13px;color:var(--grey-d)}
+.vcap b{color:var(--midnight)}
+.shorts{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:8px}
+.short{position:relative;width:212px;aspect-ratio:9/16;border-radius:20px;overflow:hidden;background:#072a2c;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.short iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.short .lab{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent);padding:14px 14px 12px;color:#fff;font-size:13px;font-weight:600;z-index:1;pointer-events:none}
+
+/* #MIERT — kompakt, 2 oszlop, bullet pointok */
+.miert-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:center;max-width:1000px;margin:0 auto}
+@media(max-width:820px){.miert-grid{grid-template-columns:1fr;gap:24px}}
+.miert-media{border-radius:20px;overflow:hidden;box-shadow:0 16px 44px rgba(10,62,65,.13)}
+.miert-media img{display:block;width:100%}
+.miert-body h2{text-align:left;font-size:clamp(26px,3.5vw,36px);margin-bottom:18px}
+.miert-body h2 em{font-style:normal;color:var(--coral)}
+.sym{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:12px}
+.sym li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;color:var(--ink);line-height:1.5}
+.sym .c{flex:none;width:26px;height:26px;border-radius:9px;background:var(--coral-ul);border:1px solid var(--coral-l);display:grid;place-items:center;margin-top:1px}
+.sym .c .zia-icon{width:15px;height:15px;color:var(--coral-d)}
+.sym b{color:var(--midnight)}
+.miert-out{background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:14px;padding:15px 18px;font-size:15px;color:var(--midnight);line-height:1.5}
+.miert-out b{color:var(--coral-d)}
+
+/* BORI CSÍK — kompakt, kép balra / szöveg jobbra */
+.bstrip{display:grid;grid-template-columns:190px 1fr;gap:32px;align-items:center;max-width:940px;margin:0 auto;background:#fff;border:1px solid var(--teal-l);border-radius:22px;padding:26px 32px;box-shadow:0 12px 36px rgba(10,62,65,.07)}
+@media(max-width:760px){.bstrip{grid-template-columns:1fr;gap:18px;text-align:center;padding:24px 20px}}
+.bstrip img{width:100%;max-width:190px;aspect-ratio:1;border-radius:18px;object-fit:cover;display:block;margin:0 auto;border:4px solid var(--teal-ul)}
+.bstrip .role{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--teal-d);margin:0 0 6px}
+.bstrip h3{font-size:clamp(19px,2.4vw,24px);margin:0 0 8px}
+.bstrip p{margin:0 0 10px;font-size:14.5px;color:var(--grey-d);line-height:1.55}
+.bstrip p b{color:var(--midnight)}
+.bstrip .q{display:inline-block;background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:14px 14px 14px 4px;padding:10px 14px;font-style:italic;color:var(--midnight);font-size:13.5px;line-height:1.5}
+
+/* DESKTOP-ONLY CTA a szekciók alján */
+.sec-cta{display:none}
+@media(min-width:881px){.sec-cta{display:flex;justify-content:center;margin-top:34px}}
+.sec-cta.left{justify-content:flex-start;margin-top:20px}
+.sec-cta .btn{font-size:15.5px;padding:15px 30px}
+
+/* MINDEN EGY HELYEN — 4 app helyett egy (sötét márkaháttér) */
+.bg-dark{background:var(--midnight)}
+.bg-dark h2.sec{color:#fff}
+.bg-dark h2.sec em{color:var(--accent-dark)}
+.bg-dark .eyebrow{color:var(--accent-dark)}
+.bg-dark .eyebrow::before{background:var(--accent-dark)}
+.bg-dark .sec-lead{color:rgba(255,255,255,.74)}
+.bg-dark .ocard{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.13);box-shadow:none}
+.bg-dark .ocard:hover{background:rgba(255,255,255,.1);box-shadow:0 12px 34px rgba(0,0,0,.25)}
+.bg-dark .ocard b{color:#fff}
+.bg-dark .ocard p{color:rgba(255,255,255,.72)}
+.bg-dark .ocard .ic{background:rgba(27,164,172,.2);border-color:rgba(27,164,172,.4)}
+.bg-dark .ocard .ic .zia-icon{color:var(--teal-l)}
+.bg-dark .ocard .instead{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:var(--teal-l)}
+.bg-dark .one-out{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15)}
+.bg-dark .one-out p{color:#fff}
+.bg-dark .one-out p b{color:var(--accent-dark)}
+
+.one-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1000px;margin:0 auto}
+@media(max-width:860px){.one-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.one-grid{grid-template-columns:1fr}}
+.ocard{background:#fff;border:1px solid var(--teal-l);border-radius:18px;padding:17px;box-shadow:0 3px 16px rgba(10,62,65,.05);transition:.3s;display:flex;gap:14px;align-items:flex-start}
+.ocard:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(10,62,65,.09)}
+.ocard .ic{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--teal-ul);border:1px solid var(--teal-l)}
+.ocard b{display:block;font-size:15.5px;color:var(--midnight);font-weight:700;line-height:1.25;margin-bottom:4px}
+.ocard p{margin:0;font-size:13.5px;color:var(--grey-d);line-height:1.5}
+.ocard .instead{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;color:var(--teal-d);background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:999px;padding:3px 10px}
+.one-out{max-width:760px;margin:34px auto 0;text-align:center;background:#fff;border:1px solid var(--teal-l);border-radius:18px;padding:22px 26px}
+.one-out p{margin:0;font-family:var(--head);font-size:clamp(17px,2.2vw,21px);color:var(--midnight);line-height:1.45;font-weight:500}
+.one-out p b{color:var(--coral-d);font-weight:700}
+/* jogi/compliance megjegyzés */
+.disclaimer{max-width:760px;margin:30px auto 0;font-size:12.5px;color:var(--grey-d);line-height:1.65;background:var(--grey-ul);border:1px solid var(--grey-l);border-left:3px solid var(--teal);border-radius:10px;padding:14px 18px}
+.disclaimer b{color:var(--midnight)}
+.disclaimer.in-col{max-width:none;margin:26px 0 0;line-height:1.95;padding:16px 18px}
+
+/* ÉTRENDTERVEZŐ */
+.mp-hero{max-width:920px;margin:0 auto 28px;border-radius:22px;overflow:hidden;box-shadow:0 20px 56px rgba(10,62,65,.14);border:1px solid var(--grey-l)}
+.mp-hero img{display:block;width:100%}
+.mp-ways{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1000px;margin:0 auto 26px}
+@media(max-width:900px){.mp-ways{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.mp-ways{grid-template-columns:1fr}}
+.way{background:#fff;border:1px solid var(--grey-l);border-radius:18px;padding:18px 17px;box-shadow:0 3px 16px rgba(10,62,65,.05);position:relative;transition:.3s}
+.way:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(10,62,65,.09)}
+.way .no{font-family:var(--head);font-size:13px;font-weight:700;color:var(--teal-d);background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:999px;padding:2px 10px;display:inline-block;margin-bottom:10px}
+.way b{display:block;font-family:var(--head);font-size:17px;color:var(--midnight);font-weight:600;margin-bottom:6px;line-height:1.25}
+.way p{margin:0;font-size:13.5px;color:var(--grey-d);line-height:1.55}
+.way .prem{display:inline-block;margin-left:6px;font-family:var(--body);font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--pear);color:var(--midnight);border-radius:999px;padding:2px 8px;vertical-align:middle}
+.diet-chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;max-width:760px;margin:0 auto 30px}
+.diet-chips .chip{font-size:13px;font-weight:700;background:#fff;border:1px solid var(--teal-l);color:var(--midnight);border-radius:999px;padding:8px 16px;box-shadow:0 2px 10px rgba(10,62,65,.04)}
+.diet-chips .chip.more{background:var(--teal-ul);border-style:dashed;color:var(--teal-d)}
+.mp-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;max-width:960px;margin:0 auto}
+@media(max-width:860px){.mp-grid{grid-template-columns:1fr;gap:30px}}
+.mp-shots{display:flex;gap:16px;justify-content:center}
+.mp-shots figure{margin:0;flex:1;max-width:220px}
+.mp-shots .ph{border-radius:18px;overflow:hidden;background:var(--midnight);box-shadow:0 14px 38px rgba(10,62,65,.18);border:1px solid var(--grey-l)}
+.mp-shots .ph img{display:block;width:100%}
+.mp-shots figcaption{margin-top:10px;text-align:center;font-size:12px;font-weight:700;color:var(--grey-d);line-height:1.4}
+.mp-save{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.mp-save li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--ink);line-height:1.5}
+.mp-save .c{flex:none;width:24px;height:24px;border-radius:50%;background:var(--emerald-l);color:var(--emerald);display:grid;place-items:center;font-size:12px;font-weight:800;margin-top:1px}
+.mp-save b{color:var(--midnight)}
+
+/* BORI CARD */
+.bori-card{display:flex;gap:38px;align-items:center;max-width:900px;margin:0 auto;background:#fff;border:1px solid var(--teal-l);border-radius:24px;padding:34px 42px;box-shadow:0 16px 44px rgba(10,62,65,.08)}
+.bori-card img{width:180px;height:180px;border-radius:50%;object-fit:cover;flex:none;border:6px solid var(--teal-ul)}
+.bori-card h3{font-size:22px;margin:0 0 3px}
+.bori-card .role{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--teal-d);margin:0 0 10px}
+.bori-card .d{font-size:14.5px;color:var(--grey-d);line-height:1.6;margin:0 0 12px}
+.bori-card .d b{color:var(--midnight)}
+.bori-card .q{display:inline-block;background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:16px 16px 16px 4px;padding:12px 16px;font-style:italic;color:var(--midnight);font-size:14px;line-height:1.5}
+.bori-card .d2{font-size:13px;margin:12px 0 0}
+@media(max-width:760px){.bori-card{flex-direction:column;text-align:center;padding:26px 22px;gap:18px}.bori-card img{width:132px;height:132px}}
+
+/* FEATURE STRIP */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:980px;margin:0 auto}
+@media(max-width:820px){.feat-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.feat-grid{grid-template-columns:1fr}}
+.fcard{background:#fff;border:1px solid var(--grey-l);border-radius:18px;padding:24px;box-shadow:0 3px 16px rgba(10,62,65,.05);transition:.3s}
+.fcard:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(10,62,65,.09)}
+.fcard .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:22px;background:var(--teal-ul);border:1px solid var(--teal-l);margin-bottom:12px}
+.fcard h4{font-size:16.5px;margin:0 0 6px}
+.fcard p{margin:0;font-size:14px;color:var(--grey-d);line-height:1.6}
+.fcard .tag{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;color:var(--teal-d);background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:999px;padding:3px 10px}
+
+/* BRIDGE */
+.bridge{position:relative;overflow:hidden;background:linear-gradient(170deg,var(--midnight),var(--midnight-2));color:#fff;padding:46px 0;text-align:center}
+.bridge::after{content:"";position:absolute;left:-90px;top:-110px;width:300px;height:300px;border-radius:50%;background:rgba(239,242,59,.10)}
+.bridge::before{content:"";position:absolute;right:-80px;bottom:-120px;width:260px;height:260px;border-radius:50%;background:rgba(27,164,172,.20)}
+.bridge p.b1{position:relative;z-index:1;max-width:720px;margin:0 auto;font-family:var(--head);font-size:clamp(21px,2.8vw,30px);line-height:1.5;color:rgba(255,255,255,.85);font-weight:400}
+.bridge p.b1 b{color:#fff;font-weight:600}
+.bridge p.b2{position:relative;z-index:1;font-family:var(--head);font-size:clamp(23px,3.3vw,34px);color:var(--pear);font-weight:600;margin:14px 0 0}
+.bridge .bcta{position:relative;z-index:1;margin-top:26px;display:flex;gap:13px;justify-content:center;flex-wrap:wrap}
+
+/* WHAT YOU GET (stack) */
+.stack{max-width:560px;margin:0 auto 40px;display:flex;flex-direction:column;text-align:left;border:1px solid var(--grey-l);border-radius:18px;overflow:hidden;box-shadow:0 6px 26px rgba(10,62,65,.06)}
+.stack li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;padding:10px 15px;border-bottom:1px solid var(--grey-ul);list-style:none;background:#fff}
+.stack li:last-child{border-bottom:none}
+.stack li.hi{background:var(--pear-ul)}
+.stack .c{flex:none;width:23px;height:23px;border-radius:50%;background:var(--emerald-l);color:var(--emerald);display:grid;place-items:center;font-size:12px;font-weight:800;margin-top:1px}
+.stack b{color:var(--midnight)}
+.stack small{display:block;color:var(--grey-d);font-size:12.5px;margin-top:1px;line-height:1.5}
+
+/* PRICING — single offer card */
+.offer-card{position:relative;max-width:660px;margin:0 auto;background:#fff;border:1px solid var(--grey-l);border-radius:26px;padding:32px 36px 28px;text-align:center;box-shadow:0 24px 64px rgba(10,62,65,.1);overflow:hidden}
+@media(max-width:560px){.offer-card{padding:30px 22px}}
+.offer-card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--pear))}
+.offer-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(236,91,19,.22);background:var(--coral-ul);color:var(--coral-d);font-size:12px;font-weight:800;padding:6px 16px;border-radius:999px;margin-bottom:16px}
+.offer-card h3{font-family:var(--head);font-size:clamp(25px,3.4vw,33px);margin-bottom:8px;font-weight:600}
+.offer-card h3 b{color:var(--coral);font-weight:700}
+.offer-card .od{max-width:490px;margin:0 auto 24px;font-size:15px;line-height:1.65;color:var(--grey-d)}
+.offer-card .stack{margin-bottom:20px}
+.price{display:flex;align-items:baseline;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.price .old{font-family:var(--head);font-size:24px;font-weight:400;color:var(--grey-m);text-decoration:line-through}
+.price .new{font-family:var(--head);font-size:clamp(40px,6vw,50px);font-weight:700;color:var(--midnight);line-height:1}
+.price .new small{font-size:19px;color:var(--grey-m);font-weight:400}
+.price .save{background:var(--coral);color:#fff;font-size:11px;font-weight:800;letter-spacing:.04em;padding:5px 11px;border-radius:999px;text-transform:uppercase}
+.price-day{font-size:14px;color:var(--grey-d);margin:10px 0 22px}
+.price-day b{color:var(--teal-d)}
+.offer-card .btn{width:100%;max-width:430px;font-size:17px;padding:17px 36px}
+.placeholder-note{margin-top:16px;font-size:11.5px;color:var(--coral-d);background:var(--coral-ul);border:1px dashed var(--coral-m);border-radius:10px;padding:8px 12px;display:inline-block;text-align:left;line-height:1.6}
+.price-note{max-width:680px;margin:26px auto 0;text-align:center;font-size:12.5px;color:var(--grey-m);line-height:1.6}
+.transp{margin-top:18px;text-align:center;font-size:13px;color:var(--grey-d);font-weight:600}
+.transp .sep{margin:0 6px;color:var(--grey-m)}
+
+/* STORE BADGES */
+.store-badges{display:flex;gap:14px;justify-content:center;align-items:center;margin-top:28px;flex-wrap:wrap}
+.store-badges img{height:46px;width:auto;display:block}
+
+/* FAQ */
+.faq{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+@media(min-width:881px){.faq{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:1000px;align-items:start}}
+.faq .qa{background:#fff;border:1px solid var(--grey-l);border-radius:16px;padding:15px 18px}
+.faq .q{font-weight:700;color:var(--midnight);font-size:15.5px;margin:0 0 6px;font-family:var(--body)}
+.faq .a{margin:0;font-size:14px;color:var(--grey-d);line-height:1.6}
+.faq .a b{color:var(--midnight)}
+
+/* FINAL */
+.final{position:relative;overflow:hidden;background:var(--midnight);color:#fff;padding:58px 0;text-align:center}
+.final::after{content:"";position:absolute;right:-110px;top:-130px;width:360px;height:360px;border-radius:50%;background:rgba(239,242,59,.12)}
+.final::before{content:"";position:absolute;left:-90px;bottom:-150px;width:300px;height:300px;border-radius:50%;background:rgba(27,164,172,.20)}
+.final h2{color:#fff;font-size:clamp(28px,4vw,42px);margin-bottom:14px;position:relative;z-index:1}
+.final h2 .hl{color:var(--pear)}
+.final p{max-width:560px;margin:0 auto 28px;font-size:17px;color:rgba(255,255,255,.8);position:relative;z-index:1}
+.final .fcta{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.final .micro{margin-top:14px;color:rgba(255,255,255,.55);position:relative;z-index:1}
+
+/* FOOTER */
+footer.ft{background:#062A2C;color:rgba(255,255,255,.6);padding:26px 0;font-size:13px}
+.ft-in{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.ft-logos img.zia{height:30px}
+.ft a{color:rgba(255,255,255,.7)}
+.ft a:hover{color:#fff}
+.ft-note{max-width:860px;margin:16px auto 0;font-size:11px;color:rgba(255,255,255,.4);text-align:center;line-height:1.6}
+
+/* sticky mobile CTA */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--midnight);color:#fff;display:none;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;box-shadow:0 -6px 24px rgba(0,0,0,.22)}
+.sticky-cta .px{line-height:1.15}
+.sticky-cta .px b{font-family:var(--body);font-size:13.5px;font-weight:700;color:var(--accent-dark);line-height:1.3;display:block}
+.sticky-cta .px .old{font-size:12px;color:rgba(255,255,255,.5);text-decoration:line-through;margin-left:6px}
+.sticky-cta .px small{display:block;font-family:var(--body);font-size:12.5px;color:rgba(255,255,255,.88);font-weight:600;margin-top:2px}
+.sticky-cta .btn{padding:11px 15px;font-size:13px;white-space:nowrap;flex:none}
+@media(max-width:880px){.sticky-cta{display:flex}body{padding-bottom:76px}}
+@media(max-width:360px){.sticky-cta .px b{font-size:12.5px}.sticky-cta .btn{font-size:12px;padding:10px 12px}}
+
+/* Vizuális irány: a Zia eredeti arculatát megőrző, egységes humanista vonalikonok. */
+.zia-icon-sprite{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.zia-icon{width:1.2em;height:1.2em;display:block;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.hbx .ic .zia-icon,.ocard .ic .zia-icon,.fcard .ic .zia-icon{width:22px;height:22px;color:var(--teal-d)}
+.app-feats .ic .zia-icon{width:22px;height:22px;color:var(--coral-d)}
+.pcard .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--coral-ul);border:1px solid var(--coral-l);margin-bottom:12px}
+.pcard .ic .zia-icon{width:23px;height:23px;color:var(--coral-d)}
+.proof .st .n .zia-icon{width:28px;height:28px;margin:0 auto;color:var(--coral)}
+.bori-card h3 .zia-icon{display:inline-block;width:1em;height:1em;vertical-align:-.14em;color:var(--coral);margin-left:.18em}
+.offer-pill .zia-icon{width:15px;height:15px;color:var(--coral-d)}
+.placeholder-note .zia-icon{display:inline-block;width:15px;height:15px;vertical-align:-.18em;margin-right:4px;color:var(--coral-d)}
+.mp-save .c .zia-icon,.stack .c .zia-icon{width:14px;height:14px;stroke-width:2.5}
+
+/* ===== v2 KOMPONENSEK ===== */
+/* hero állapot-eyebrow */
+.cond-strip{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.cond-strip span{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--teal-d);background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:999px;padding:5px 11px}
+.reassure{margin:0 0 12px;font-size:14px;color:var(--grey-d);font-style:italic}
+.hero-price{margin:12px 0 0;font-size:13px;color:var(--grey-d);font-weight:600}
+.hero-price b{color:var(--midnight)}
+
+/* szegmens-választó */
+.seg-tabs{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:0 auto 22px;max-width:900px}
+.seg-tab{font-family:var(--body);font-size:14px;font-weight:700;color:var(--grey-d);background:#fff;border:1.5px solid var(--grey-l);border-radius:999px;padding:10px 18px;cursor:pointer;transition:.2s}
+.seg-tab:hover{border-color:var(--teal);color:var(--midnight)}
+.seg-tab[aria-selected="true"]{background:var(--midnight);border-color:var(--midnight);color:#fff}
+.seg-panel{display:none;max-width:760px;margin:0 auto;background:#fff;border:1px solid var(--teal-l);border-radius:20px;padding:26px 30px;box-shadow:0 10px 32px rgba(10,62,65,.07)}
+.seg-panel[data-active="1"]{display:block}
+.seg-panel h3{font-size:clamp(19px,2.4vw,23px);margin:0 0 10px}
+.seg-panel p{margin:0;font-size:15.5px;color:var(--grey-d);line-height:1.6}
+.seg-out{max-width:760px;margin:24px auto 0;text-align:center;font-size:15px;color:var(--midnight);line-height:1.6}
+.seg-out b{color:var(--coral-d)}
+.reassure-end{max-width:640px;margin:18px auto 0;text-align:center;font-size:14.5px;color:var(--grey-d);font-style:italic}
+
+/* Bori v2 */
+.bori2{display:grid;grid-template-columns:230px 1fr;gap:36px;align-items:start;max-width:960px;margin:0 auto;background:#fff;border:1px solid var(--teal-l);border-radius:24px;padding:30px 34px;box-shadow:0 14px 40px rgba(10,62,65,.08)}
+@media(max-width:800px){.bori2{grid-template-columns:1fr;gap:20px;padding:24px 20px}}
+.bori2 img{width:100%;max-width:230px;aspect-ratio:1;border-radius:20px;object-fit:cover;display:block;margin:0 auto;border:4px solid var(--teal-ul)}
+.bori2 .cred{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--teal-d);margin:0 0 7px}
+.bori2 h3{font-size:clamp(20px,2.6vw,26px);margin:0 0 12px}
+.bori2 p{margin:0 0 12px;font-size:15px;color:var(--grey-d);line-height:1.6}
+.bori2 p b{color:var(--midnight)}
+.bori2 .q{display:inline-block;background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:16px 16px 16px 4px;padding:12px 16px;font-style:italic;color:var(--midnight);font-size:14.5px;line-height:1.5}
+.fineprint{margin:14px 0 0;font-size:12.5px;color:var(--grey-m);line-height:1.6}
+
+/* idővonal — az első heted */
+.week{max-width:840px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+.day{display:grid;grid-template-columns:92px 1fr;gap:22px;align-items:start;position:relative;padding:0 0 26px}
+@media(max-width:640px){.day{grid-template-columns:64px 1fr;gap:14px}}
+.day:last-child{padding-bottom:0}
+.day .mark{position:relative;text-align:center}
+.day .mark b{display:block;font-family:var(--head);font-size:15px;font-weight:700;color:#fff;background:var(--midnight);border-radius:999px;padding:7px 0}
+.day:not(:last-child) .mark::after{content:"";position:absolute;left:50%;top:38px;bottom:-26px;width:2px;background:var(--teal-l);transform:translateX(-50%)}
+.day .card{background:#fff;border:1px solid var(--grey-l);border-radius:18px;padding:18px 20px;box-shadow:0 3px 16px rgba(10,62,65,.05)}
+.day .card h4{font-family:var(--head);font-size:18px;margin:0 0 6px;font-weight:600}
+.day .card p{margin:0;font-size:14.5px;color:var(--grey-d);line-height:1.6}
+.day .card p.quote{margin-top:9px;background:var(--emerald-ul);border:1px solid var(--emerald-bd);border-radius:14px 14px 14px 4px;padding:11px 14px;font-style:italic;color:var(--midnight);font-size:14px;line-height:1.6}
+.day .card p.quote .tochat{display:block;margin-top:9px;font-style:normal;font-size:12.5px;font-weight:800;letter-spacing:.02em;color:var(--emerald)}
+.day .card p.after-quote{margin:12px 0 0;font-size:14px;color:var(--grey-d);line-height:1.55}
+.day .card .note{display:block;margin-top:8px;font-size:12.5px;color:var(--grey-m);line-height:1.55}
+.moments{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;max-width:720px;margin:30px auto 0}
+.moments .moment{width:220px;max-width:100%}
+@media(max-width:760px){.moments{grid-template-columns:1fr;max-width:270px}}
+.moment{background:#fff;border:1px solid var(--grey-l);border-radius:18px;overflow:hidden;box-shadow:0 4px 18px rgba(10,62,65,.06)}
+.moment .m{position:relative;aspect-ratio:9/16;overflow:hidden;background:var(--midnight)}
+.moment .m iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.moment .m img{width:100%;height:100%;object-fit:cover;display:block}
+.moment .t{padding:13px 15px;font-size:14px;font-weight:700;color:var(--midnight)}
+.moments-lead{text-align:center;font-size:14.5px;color:var(--grey-d);margin:30px 0 0}
+
+/* funkciórács v2 */
+.frows{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:760px){.frows{grid-template-columns:1fr}}
+.frow{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--grey-l);border-radius:14px;padding:14px 16px}
+.frow .ic{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--teal-ul);border:1px solid var(--teal-l)}
+.frow .ic .zia-icon{width:19px;height:19px;color:var(--teal-d)}
+.frow b{display:block;font-size:14.5px;color:var(--midnight);margin-bottom:3px}
+.frow p{margin:0;font-size:13px;color:var(--grey-d);line-height:1.5}
+.frow .inst{display:inline-block;margin-top:6px;font-size:10.5px;font-weight:700;color:var(--teal-d);background:var(--teal-ul);border:1px solid var(--teal-l);border-radius:999px;padding:2px 9px}
+
+/* kinek nem való */
+.notfor{max-width:720px;margin:34px auto 0;background:var(--coral-ul);border:1px solid var(--coral-l);border-radius:18px;padding:22px 26px}
+.notfor h3{font-size:19px;margin:0 0 12px}
+.notfor ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.notfor li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:var(--ink);line-height:1.5}
+.notfor li::before{content:"—";color:var(--coral-d);font-weight:800;flex:none}
+
+/* impresszum */
+.impressum{max-width:860px;margin:14px auto 0;font-size:11px;color:rgba(255,255,255,.42);text-align:center;line-height:1.7}
+
+/* --- 2026-09-02 · szegmensek fülváltó helyett, sötét márkaháttéren --- */
+.seg-wrap{max-width:1040px;margin:26px auto 0;display:grid;grid-template-columns:300px 1fr;gap:26px;align-items:stretch}
+@media(max-width:960px){.seg-wrap{grid-template-columns:1fr;gap:20px}}
+.seg-photo{margin:0;border-radius:20px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.10)}
+.seg-photo img{display:block;width:100%;height:100%;object-fit:cover;min-height:280px}
+@media(max-width:960px){.seg-photo img{max-height:300px}}
+.segs{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:1100px){.segs{grid-template-columns:1fr}}
+@media(max-width:960px){.segs{grid-template-columns:1fr 1fr}}
+@media(max-width:780px){.segs{grid-template-columns:1fr}}
+.segc{display:flex;gap:15px;align-items:flex-start;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:22px 24px;transition:.25s}
+.segc:hover{background:rgba(255,255,255,.1);border-color:rgba(27,164,172,.5)}
+.segc .ic{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(27,164,172,.2);border:1px solid rgba(27,164,172,.42)}
+.segc .ic .zia-icon{width:21px;height:21px;color:var(--teal-l)}
+.segc b{display:block;font-family:var(--head);font-size:17.5px;font-weight:600;color:#fff;line-height:1.25;margin-bottom:8px}
+.segc p{margin:0;font-size:14.5px;color:rgba(255,255,255,.72);line-height:1.55}
+.bg-dark .seg-out{color:#fff}
+.bg-dark .seg-out b{color:var(--accent-dark)}
+.bg-dark .reassure-end{color:rgba(255,255,255,.72)}
+
+
+/* az 1. nap allépései */
+.day .card ol.setup{margin:10px 0 0;padding:0;list-style:none;counter-reset:su;display:flex;flex-direction:column;gap:10px}
+.day .card ol.setup li{counter-increment:su;position:relative;padding-left:30px;font-size:14.5px;color:var(--grey-d);line-height:1.55}
+.day .card ol.setup li::before{content:counter(su);position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:50%;background:var(--teal-ul);border:1px solid var(--teal-l);color:var(--teal-d);font-family:var(--head);font-size:12px;font-weight:700;display:grid;place-items:center}
+.day .card ol.setup li b{color:var(--midnight)}
+
+/* heti report — mit néz át */
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;margin:12px 0 0;padding:14px 16px;background:var(--grey-ul);border:1px solid var(--grey-l);border-radius:14px}
+@media(max-width:700px){.report-grid{grid-template-columns:1fr;gap:16px}}
+.report-grid .rhead{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--teal-d);margin-bottom:8px}
+.report-grid ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.report-grid li{position:relative;padding-left:16px;font-size:13.5px;color:var(--grey-d);line-height:1.5}
+.report-grid li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.report-grid li b{color:var(--midnight);font-weight:700}
+.uniq{display:inline-block;margin-left:5px;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--coral);border-radius:999px;padding:2px 7px;vertical-align:1px}
+
+/* zöld szekcióháttér */
+/* sötétzöld szekció, fehér kártyákkal */
+.bg-green{background:var(--midnight)}
+.bg-green h2.sec{color:#fff}
+.bg-green h2.sec em{color:var(--accent-dark)}
+.bg-green .eyebrow{color:var(--accent-dark)}
+.bg-green .eyebrow::before{background:var(--accent-dark)}
+.bg-green .sec-lead{color:rgba(255,255,255,.76)}
+.bg-green .moments-lead{color:rgba(255,255,255,.7)}
+.bg-green .disclaimer{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);border-left-color:var(--accent-dark);color:rgba(255,255,255,.72)}
+.bg-green .disclaimer b{color:#fff}
+.bg-green .wcard,.bg-green .riport-panel,.bg-green .moment{background:#fff}
+.bg-green .wmark{background:var(--coral)}
+
+/* az első heted — 2x2 rács a hosszú idővonal helyett */
+.week{max-width:1000px;margin:26px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:18px;flex-direction:unset}
+@media(max-width:860px){.week{grid-template-columns:1fr}}
+.wcard{position:relative;background:#fff;border:1px solid var(--grey-l);border-radius:20px;padding:26px 24px 22px;box-shadow:0 4px 20px rgba(10,62,65,.06)}
+.wmark{position:absolute;top:-13px;left:24px;font-family:var(--head);font-size:13.5px;font-weight:700;color:#fff;background:var(--midnight);border-radius:999px;padding:5px 15px}
+.wcard h4{font-family:var(--head);font-size:19px;font-weight:600;color:var(--midnight);margin:0 0 8px}
+.wcard>p{margin:0 0 10px;font-size:14.5px;color:var(--grey-d);line-height:1.6}
+.wcard>p:last-child{margin-bottom:0}
+.wcard>p b{color:var(--midnight)}
+.wcard p.quote{margin:10px 0 0;background:var(--emerald-ul);border:1px solid var(--emerald-bd);border-radius:14px 14px 14px 4px;padding:12px 15px;font-style:italic;color:var(--midnight);font-size:14px;line-height:1.6}
+.wcard p.quote .tochat{display:block;margin-top:9px;font-style:normal;font-size:12.5px;font-weight:800;color:var(--emerald)}
+.wcard ol.setup{margin:6px 0 0;padding:0;list-style:none;counter-reset:su;display:flex;flex-direction:column;gap:10px}
+.wcard ol.setup li{counter-increment:su;position:relative;padding-left:30px;font-size:14px;color:var(--grey-d);line-height:1.55}
+.wcard ol.setup li::before{content:counter(su);position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:50%;background:var(--teal-ul);border:1px solid var(--teal-l);color:var(--teal-d);font-family:var(--head);font-size:12px;font-weight:700;display:grid;place-items:center}
+.wcard ol.setup li b{color:var(--midnight)}
+
+/* heti riport — kiemelt panel */
+.riport-panel{max-width:1000px;margin:26px auto 0;background:#fff;border:1px solid var(--emerald-bd);border-radius:22px;padding:24px 26px;box-shadow:0 10px 34px rgba(10,62,65,.07)}
+@media(max-width:600px){.riport-panel{padding:20px 18px}}
+.rp-head{font-family:var(--head);font-size:19px;font-weight:600;color:var(--midnight);margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.riport-panel .report-grid{margin:0;background:transparent;border:0;padding:0}
+.rp-note{margin:16px 0 0;font-size:12.5px;color:var(--grey-m);line-height:1.65}
+.rp-note b{color:var(--grey-d)}
+
+/* életkép a „Közben, bármikor" szekcióban */
+.moments-photo{margin:0 auto 26px;max-width:900px;border-radius:20px;overflow:hidden;box-shadow:0 14px 40px rgba(10,62,65,.14);border:1px solid var(--grey-l)}
+.moments-photo img{display:block;width:100%;aspect-ratio:16/7;object-fit:cover}
+@media(max-width:700px){.moments-photo img{aspect-ratio:4/3}}
+
+/* az első heted — slider */
+.wslider{position:relative;max-width:780px;margin:26px auto 0}
+.wsteps{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.wstep{font-family:var(--body);font-size:13.5px;font-weight:700;color:rgba(255,255,255,.72);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 16px;cursor:pointer;transition:.2s}
+.wstep:hover{background:rgba(255,255,255,.16);color:#fff}
+.wstep[aria-selected="true"]{background:var(--coral);border-color:var(--coral);color:#fff}
+.wtrack{display:flex;align-items:stretch;gap:18px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding:14px 2px 4px}
+.wtrack::-webkit-scrollbar{display:none}
+.wslide{flex:0 0 100%;scroll-snap-align:center;min-width:0}
+.wslider .wcard{height:100%}
+.warrow{position:absolute;top:50%;z-index:3;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.12);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:.2s;backdrop-filter:blur(4px)}
+.warrow:hover{background:var(--coral);border-color:var(--coral)}
+.warrow[disabled]{opacity:.28;cursor:default}
+.warrow.prev{left:-58px}
+.warrow.next{right:-58px}
+@media(max-width:1000px){.warrow.prev{left:-6px}.warrow.next{right:-6px}}
+.wdots{display:flex;justify-content:center;gap:7px;margin-top:14px}
+.wdots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.28);transition:.2s}
+.wdots i.on{background:var(--coral);width:22px;border-radius:999px}
+.wcard p.after-q{margin:12px 0 0;font-size:14.5px;color:var(--grey-d);line-height:1.55}
+.wcard .note{display:block;margin-top:12px;font-size:12.5px;color:var(--grey-m);line-height:1.6}
+
+.bg-green .price-note{color:rgba(255,255,255,.55)}
+.bg-green .price-note a{color:rgba(255,255,255,.8)}
+
+/* mobilon a hero-kép a szöveg fölött, kisebben (a 580px-es szabály után kell álljon) */
+@media(max-width:880px){.hero-shot img{max-width:min(300px,72vw)}}
+@media(max-width:520px){.hero-shot img{max-width:min(250px,66vw)}}
+
+/* bevezető videó az "Az első heted" szekció tetején */
+.intro-vid{max-width:300px;margin:26px auto 6px}
+.intro-vid .vframe{aspect-ratio:9/16;border-radius:20px}
+.bg-green .vcap{color:rgba(255,255,255,.72)}
+.bg-green .vcap b{color:#fff}
+</style>
+</head>
+<body>
+
+<svg class="zia-icon-sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="zia-camera" viewBox="0 0 24 24"><path d="M14.5 4 16 7h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3l1.5-3z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+    <symbol id="zia-chart-up" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 16 4-4 3 3 5-7"/></symbol>
+    <symbol id="zia-user-check" viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 21a7 7 0 0 1 11.5-5.3"/><path d="m16 19 2 2 4-4"/></symbol>
+    <symbol id="zia-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="zia-battery-low" viewBox="0 0 24 24"><rect width="16" height="10" x="2" y="7" rx="2"/><path d="M22 11v2"/><path d="M6 11v2"/></symbol>
+    <symbol id="zia-chart-down" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 8 4 4 3-3 5 7"/></symbol>
+    <symbol id="zia-puzzle" viewBox="0 0 24 24"><path d="M19.4 13.5a2.4 2.4 0 1 0 0-3H16V7a2 2 0 0 0-2-2h-2.5a2.5 2.5 0 1 0-3 0H6a2 2 0 0 0-2 2v3.5h3.4a2.4 2.4 0 1 1 0 3H4V17a2 2 0 0 0 2 2h3.5a2.5 2.5 0 1 0 3 0H16a2 2 0 0 0 2-2v-3.5z"/></symbol>
+    <symbol id="zia-calendar" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></symbol>
+    <symbol id="zia-dumbbell" viewBox="0 0 24 24"><path d="m6.5 6.5 11 11M21 21l-1-1M3 3l1 1M18 22l4-4M2 6l4-4M3 10l7-7M14 21l7-7"/></symbol>
+    <symbol id="zia-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></symbol>
+    <symbol id="zia-watch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><path d="M12 10v2l1 1M9 2h6l1 4H8zM9 22h6l1-4H8z"/></symbol>
+    <symbol id="zia-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.2 3.2a3 3 0 0 1-1.8 1.8L6 9l3 1.1a3 3 0 0 1 1.8 1.8L12 15l1.2-3.1a3 3 0 0 1 1.8-1.8L18 9l-3-1a3 3 0 0 1-1.8-1.8z"/><path d="m5 17-.6 1.4a2 2 0 0 1-1 1L2 20l1.4.6a2 2 0 0 1 1 1L5 23l.6-1.4a2 2 0 0 1 1-1L8 20l-1.4-.6a2 2 0 0 1-1-1zM19 2l.5 1.3a2 2 0 0 0 1.2 1.2L22 5l-1.3.5a2 2 0 0 0-1.2 1.2L19 8l-.5-1.3a2 2 0 0 0-1.2-1.2L16 5l1.3-.5a2 2 0 0 0 1.2-1.2z"/></symbol>
+    <symbol id="zia-salad" viewBox="0 0 24 24"><path d="M7 21h10M12 21v-4"/><path d="M4 11h16a8 8 0 0 1-16 0Z"/><path d="M8 11a4 4 0 0 1 8 0M12 7V3M10 5 8 3M14 5l2-2"/></symbol>
+    <symbol id="zia-bell" viewBox="0 0 24 24"><path d="M10.3 21h3.4M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/></symbol>
+    <symbol id="zia-droplet" viewBox="0 0 24 24"><path d="M12 2.7 6.5 9a7 7 0 1 0 11 0z"/></symbol>
+    <symbol id="zia-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+    <symbol id="zia-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></symbol>
+    <symbol id="zia-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-4 0v4M14 10V4a2 2 0 0 0-4 0v6M10 10V5a2 2 0 0 0-4 0v8l-1.2-1.2a2 2 0 0 0-2.8 2.8l5.2 5.2A7 7 0 0 0 12 22h1a7 7 0 0 0 7-7v-4a2 2 0 0 0-4 0v1"/></symbol>
+    <symbol id="zia-alert" viewBox="0 0 24 24"><path d="M10.3 3.8 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="zia-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </defs>
+</svg>
+
+<!-- FELSŐ SÁV — a −10% csak itt szerepel a hero előtt -->
+<div class="top-strip">
+  <div class="wrap in">
+    <span>Online előfizetés <span class="hl">−10%</span></span>
+    <span class="dot opt">·</span>
+    <span class="opt">Magyar dietetikus, magyar receptek</span>
+    <span class="dot opt">·</span>
+    <span class="opt">Bármikor lemondható</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#top"><img class="zia" src="https://zia.merovahealth.com/assets/img/zia-logo/Zia-Logo-Positive.svg" alt="Zia" /></a>
+    <nav class="nav-links">
+      <a href="#felismered">Felismered magad?</a>
+      <a href="#bori">Bori, a dietetikus</a>
+      <a href="#het">Az első heted</a>
+      <a href="#ar">Ár</a>
+      <a href="https://zia.merovahealth.com/hu/auth/sign-up?package=zia_3m_2&amp;promo=WEBCOUPON" class="btn btn-coral">Belevágok</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 1 · HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="cond-strip">
+        <span>IR</span><span>PCOS</span><span>2-es típusú cukorbetegség</span><span>GLP-1 mellett</span><span>tudatos étkezés</span>
+      </div>
+      <h1><span class="hl">Egy dietetikus, ha kérdésed van.</span> Egy AI coach, ami minden nap visszajelez.</h1>
+      <p class="lead"><b>Zia megismer</b>, szinkronizálja az adataid, és egy fotóból naplóz, számol és minden nap érthetően visszajelez: mit csinálsz jól, min érdemes változtatni. Ha ennél több kell, <b>megosztod a naplód Borival, a dietetikusunkkal</b> — és hetente személyesen válaszol.</p>
+      <p class="reassure">Életmódot váltani egyedül nehéz.</p>
+      <div class="hero-cta">
+        <a href="https://zia.merovahealth.com/hu/auth/sign-up?package=zia_3m_2&amp;promo=WEBCOUPON" class="btn btn-coral">Belevágok Ziával →</a>
+        <a href="#het" class="btn btn-ghost">Megnézem, hogyan működik ↓</a>
+      </div>
+      <p class="hero-price">3 hónap · <b>99 Ft/nap</b> · bármikor lemondható</p>
+    </div>
+    <div class="hero-shot">
+      <img src="https://zia.merovahealth.com/assets/img/zia-app/hero-zia-v2.jpg" alt="Három különböző korú és testalkatú nő sétál együtt, egyikük a Zia appot mutatja a telefonján" />
+    </div>
+  </div>
+</section>
+
+<!-- SZÁMOK -->
+<div class="proof">
+  <div class="wrap proof-in">
+    <div class="st"><div class="n">72 óra</div><div class="l">Bori válaszideje</div></div>
+    <div class="st"><div class="n">50 000+</div><div class="l">naplóbejegyzés</div></div>
+    <div class="st"><div class="n">3 000+</div><div class="l">magyar recept</div></div>
+    <div class="st"><div class="n">Magyar</div><div class="l">fejlesztés</div></div>
+  </div>
+</div>
+
+<!-- 2 · FELISMERED MAGAD? — mind a 4 helyzet egyszerre látszik -->
+<section class="blk bg-dark" id="felismered">
+  <div class="wrap">
+    <div class="eyebrow">Felismered magad?</div>
+    <h2 class="sec">Mindent jól csinálsz. <em>A mérleg mégse mozdul?</em></h2>
+    <p class="sec-lead">Akkor valószínűleg nem az akaraterőddel van baj, hanem azzal, hogy nem látod, mi történik. Zia azoknak készült, akiknél a diéta nem csak a kalória kérdése.</p>
+
+    <div class="seg-wrap">
+      <figure class="seg-photo">
+        <img src="https://zia-landing-merova.vercel.app/assets/img/miert/felismered.jpg" alt="Nő a konyhaasztalnál, elgondolkodva nézi a tányérját" loading="lazy" />
+      </figure>
+      <div class="segs">
+      <div class="segc">
+        <span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-battery-low"></use></svg></span>
+        <div>
+          <b>IR-rel vagy PCOS-szel élsz</b>
+          <p>A délutáni holtpont és a csokisóvárgás ismerős — de nem látod, nálad mi nem stimmel.</p>
+        </div>
+      </div>
+      <div class="segc">
+        <span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-droplet"></use></svg></span>
+        <div>
+          <b>2-es típusú cukorbeteg vagy</b>
+          <p>Tudod, mire kell figyelned. A napi döntésekkel mégis egyedül maradsz.</p>
+        </div>
+      </div>
+      <div class="segc">
+        <span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-target"></use></svg></span>
+        <div>
+          <b>GLP-1 kezelés mellett étkezel</b>
+          <p>Kevesebbet eszel — a kérdés, hogy elég fehérje és rost van-e benne.</p>
+        </div>
+      </div>
+      <div class="segc">
+        <span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-sparkles"></use></svg></span>
+        <div>
+          <b>Egyszerűen érteni akarod a tested</b>
+          <p>Nincs diagnózisod, csak látni akarod, mi mivel függ össze nálad.</p>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <p class="seg-out">Zia mind a négy esetben ugyanazt teszi: egy helyre gyűjti, ami veled történik, és <b>érthetően megmutatja, mi mivel függ össze nálad.</b></p>
+    <p class="reassure-end">Nem kell tökéletesnek lenni. Elég elkezdeni — a többiben segítünk.</p>
+  </div>
+</section>
+
+<!-- 3 · BORI -->
+<section class="blk bg-white" id="bori">
+  <div class="wrap">
+    <div class="eyebrow">Zia azonnal · Bori, ha ember kell</div>
+    <h2 class="sec">Bori, a dietetikusunk <em>is melletted</em></h2>
+    <p class="sec-lead">Megosztod vele a naplód — és válaszol.</p>
+    <div class="bori2">
+      <img src="https://zia.merovahealth.com/assets/img/nyari-rost-kihivas/landing-bori.webp" alt="Köllőd Bori, Zia dietetikusa" loading="lazy" />
+      <div>
+        <p class="cred">Dietetikus · Zia szakmai vezetője</p>
+        <h3>Köllőd Bori</h3>
+        <p>A Semmelweis Egyetemen végzett <b>2019-ben</b>, majd <b>2020-ban</b> a Testnevelési Egyetem sport-specifikus dietetikus szakirányán. Ő állítja össze Zia mintaétrendjeit, koordinálja Ziát, és ő felel a szakmai tartalmakért.</p>
+        <p>Ha kérdésed van, az appban teszed fel, és <b>megosztod vele a heti naplód</b>. Bori nem lát bele automatikusan: a heti kiértékelésednél található megosztás gombbal küldöd el neki a kérdésed — ő pedig személyesen, rád szabva válaszol <b>72 órán belül</b>. Zia bármikor válaszol; Bori akkor, amikor kérdésed van.</p>
+        <p class="q">„Ez nem egy konzultáció, hanem folyamatos támogatás. Az app számol — én válaszolok, amikor kérdezel."</p>
+        <p class="fineprint">Bori válaszai étrendi és életmód-tanácsok; nem helyettesítik a kezelőorvosod utasításait. Gyógyszerelést érintő kérdéssel mindig az orvosodhoz fordulj.</p>
+        <div class="sec-cta left"><a href="https://zia.merovahealth.com/hu/auth/sign-up?package=zia_3m_2&amp;promo=WEBCOUPON" class="btn btn-coral">Kérdezek Boritól →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · AZ ELSŐ HETED -->
+<section class="blk bg-green" id="het">
+  <div class="wrap">
+    <div class="eyebrow">Így működik a gyakorlatban</div>
+    <h2 class="sec">Az első <em>heted Ziával</em></h2>
+    <p class="sec-lead">Az első nap Zia megismer és összeköti az adataid — onnantól elég egy fotó a tányérodról.</p>
+
+    <div class="hero-vid intro-vid">
+      <div class="vframe">
+        <span class="vtag">Egy nap Ziával</span>
+        <iframe src="https://www.youtube-nocookie.com/embed/_bFh3cQyWig?rel=0" title="Egy nap Ziával — Zia by MEROVA" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe>
+      </div>
+      <p class="vcap">Nézd meg egy percben, hogy néz ki egy nap <b>Ziával</b>.</p>
+    </div>
+
+    <div class="wslider">
+      <div class="wsteps" role="tablist" aria-label="Az első heted lépései">
+        <button class="wstep" type="button" data-go="0" aria-selected="true">1. nap</button>
+        <button class="wstep" type="button" data-go="1" aria-selected="false">3. nap</button>
+        <button class="wstep" type="button" data-go="2" aria-selected="false">7. nap</button>
+        <button class="wstep" type="button" data-go="3" aria-selected="false">Utána</button>
+      </div>
+
+      <button class="warrow prev" type="button" aria-label="Előző lépés">‹</button>
+      <button class="warrow next" type="button" aria-label="Következő lépés">›</button>
+
+      <div class="wtrack">
+        <article class="wslide">
+          <div class="wcard">
+            <span class="wmark">1. nap</span>
+            <h4>Zia megismer — és indul a naplózás.</h4>
+            <ol class="setup">
+              <li><b>Válaszolsz Zia kérdéseire.</b> Célok, állapot (IR, PCOS, 2-es típus, GLP-1), étkezési szokások, ételpreferenciák és allergiák — ezekre szabja rád a válaszait.</li>
+              <li><b>Engedélyezed az adatszinkront.</b> Apple Health, Google Health Connect vagy Samsung Health, okosóra, CGM-szenzor. Opcionális, de innen jönnek később az összefüggések.</li>
+              <li><b>Lefotózod az étkezéseid.</b> Zia felismeri és beírja: kalória, szénhidrát, fehérje, rost. Nincs keresgélés, nincs grammozás.</li>
+            </ol>
+          </div>
+        </article>
+
+        <article class="wslide">
+          <div class="wcard">
+            <span class="wmark">3. nap</span>
+            <h4>Az első érthető visszajelzés.</h4>
+            <p>Nem számhalmaz:</p>
+            <p class="quote">„Tegnap a fehérje rendben, a rost kevés; a délutáni nassolás mindhárom nap 15 óra körül jött."</p>
+            <p class="after-q">Ha tartós mintázatot lát, nem áll meg a megállapításnál — meg is szólít:</p>
+            <p class="quote">„Tartósan alacsony fehérjefogyasztást detektáltam, és a rostbeviteled is alacsonynak minősül. Nézzük át együtt, beszéljünk arról, hogyan lehetne ezeken javítani! Milyen olyan élelmiszerek vannak, amik könnyen elérhetők — és még szereted is őket? 🙂"<span class="tochat">Irány a chat →</span></p>
+          </div>
+        </article>
+
+        <article class="wslide">
+          <div class="wcard">
+            <span class="wmark">7. nap</span>
+            <h4>Elkészül az első heti riportod.</h4>
+            <p>Itt jön az, amit egy kalóriaszámláló nem ad meg: Zia <b>összeköti a pontokat</b>, és megmutatja, mi mivel függ össze nálad.</p>
+            <p class="quote">„A vacsora utáni sétás estéket alacsonyabb reggeli értékek követték nálad."<span class="tochat">Megbeszélem Ziával →</span></p>
+            <span class="note">Zia a saját adataidban keres mintázatokat — nem általános tanácsot ad. Szenzor nélkül is működik: akkor a mozgás, az alvás és az étkezés mintázatait mutatja.</span>
+          </div>
+        </article>
+
+        <article class="wslide">
+          <div class="wcard">
+            <span class="wmark">Utána</span>
+            <h4>Kérdezed Borit.</h4>
+            <p>Ami a riportból sem derül ki, azt megkérdezed: egy koppintással <b>megosztod vele a heted</b>, és Bori az alapján válaszol — például miért nem mozdul a mérleg, pedig „mindent jól csinálsz".</p>
+            <p>Bori nem lát bele automatikusan a naplóidba: azt látja, amit megosztasz vele. A válasz <b>72 órán belül</b> érkezik, személyesen tőle.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="wdots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+
+    <div class="riport-panel">
+      <div class="rp-head">Amit a heti riport átnéz <span class="uniq">ez a különbség</span></div>
+      <div class="report-grid">
+        <div class="rcol">
+          <div class="rhead">Összefüggések</div>
+          <ul>
+            <li><b>Makrók aránya</b> — fehérje és szénhidrát együtt, a vércukorcsúcshoz mérve</li>
+            <li><b>Rost ↔ vércukor</b></li>
+            <li><b>Mozgás ↔ vércukor</b></li>
+            <li><b>Étel ↔ vércukor</b> — melyik étkezés után mi történt</li>
+          </ul>
+        </div>
+        <div class="rcol">
+          <div class="rhead">Heti elemzések</div>
+          <ul>
+            <li><b>Mikrobiom</b> — hányféle növényi összetevő van a hetedben a 30-ból, hüvelyesek és olajos magvak külön</li>
+            <li><b>Mikrotápanyagok</b> — kalcium, D-vitamin, magnézium, vas, C-vitamin, B12 becslése a naplód alapján</li>
+            <li><b>Makrócélok heti konzisztenciája</b> — hány nap voltál a zónában rostból, szénhidrátból, fehérjéből, zsírból</li>
+            <li><b>Alvás, mozgás, test</b> — átlag és ingadozás, a heti 150 perchez és a súlyodhoz mérve</li>
+          </ul>
+        </div>
+      </div>
+      <p class="rp-note">Minden elemzés mellett ott van Zia észrevétele és egy <b>„Megbeszélem Ziával"</b> gomb — nem egy grafikonnál hagy magadra. A mikrotápanyag- és mikrobiom-értékek a naplód alapján készült <b>becslések</b>, tájékoztató jelleggel. Szenzor nélkül is működik: akkor a mozgás, az alvás és az étkezés mintázatait mutatja.</p>
+    </div>
+
+    <p class="disclaimer">A megjelenített értékek és összefüggések <b>tájékoztató jellegűek</b> — kezelési, gyógyszerelési vagy inzulinadagolási döntést soha ne hozz kizárólag ezek alapján. Zia nem orvosi eszköz: a kezelésed mellett támogat, nem helyette.</p>
+    <div class="sec-cta"><a href="https://zia.merovahealth.com/hu/auth/sign-up?package=zia_3m_2&amp;promo=WEBCOUPON" class="btn btn-coral">Elkezdem az első hetem →</a></div>
+  </div>
+</section>
+
+<!-- 4b · KÖZBEN, BÁRMIKOR — külön, fehér szekció -->
+<section class="blk bg-white" id="pillanatok">
+  <div class="wrap">
+    <div class="eyebrow">Közben, bármikor</div>
+    <h2 class="sec">A hétköznapi kérdéseidre is <em>ott a válasz</em></h2>
+    <p class="sec-lead">Nem kell megvárnod a heti riportot — Zia a napi döntésekben is ott van.</p>
+    <figure class="moments-photo">
+      <img src="assets/img/funkciok/huto.webp" alt="Nő a konyhában, nyitott hűtő előtt nézi a Zia appot a telefonján" loading="lazy" />
+    </figure>
+
+    <div class="moments">
+      <div class="moment">
+        <div class="m"><iframe src="https://www.youtube-nocookie.com/embed/KVTkegh4LnA?rel=0" title="Ez a rendelés belefér? — Zia segít eldönteni" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe></div>
+        <div class="t">Ez a rendelés belefér?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · AMIT MÉG MEGKAPSZ -->
+<section class="blk bg-white" id="funkciok">
+  <div class="wrap">
+    <div class="eyebrow">Minden egy helyen</div>
+    <h2 class="sec">És minden, amiért eddig <em>négy appot használtál</em></h2>
+    <div class="frows">
+      <div class="frow"><span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-sparkles"></use></svg></span><div><b>Heti riport és összefüggések <span class="uniq">egyedi</span></b><p>Makrók aránya a vércukorcsúcshoz mérve, rost ↔ vércukor, mozgás ↔ vércukor, mikrobiom-változatosság (30 féle növény), mikrotápanyag-becslés — mindegyik mellett Zia észrevételével.</p><span class="inst">amit egy kalóriaszámláló nem ad</span></div></div>
+      <div class="frow"><span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-book"></use></svg></span><div><b>3 000+ magyar recept</b><p>Alacsony szénhidráttartalmú, gluténmentes, tejmentes, vegán szűrőkkel, dietetikus által ellenőrizve.</p><span class="inst">receptgyűjtő helyett</span></div></div>
+      <div class="frow"><span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-calendar"></use></svg></span><div><b>Étrendtervező</b><p>Kész dietetikusi mintaétrendek (IR, PCOS, GLP-1 mellé, szív- és érrendszeri, magas vérnyomás elleni, illetve vesebeteg-diétához illeszkedő*), vagy a sajátod — bevásárlólistával egy koppintásra.</p><span class="inst">menütervező helyett</span></div></div>
+      <div class="frow"><span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-dumbbell"></use></svg></span><div><b>Edzések</b><p>Jóga, gyógytorna, funkcionális edzés, 10–30 perces blokkokban.</p><span class="inst">edzésapp helyett</span></div></div>
+      <div class="frow"><span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-watch"></use></svg></span><div><b>Okoseszköz- és CGM-szinkron</b><p>Apple Health, Google Health Connect, Samsung Health; Syai és Linx szenzorok.</p><span class="inst">külön health-appok helyett</span></div></div>
+      <div class="frow"><span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-target"></use></svg></span><div><b>Napi célok</b><p>Kalória és szénhidrát — beállítod és nap közben követed.</p><span class="inst">kalóriaszámláló helyett</span></div></div>
+      <div class="frow"><span class="ic"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-user-check"></use></svg></span><div><b>Bori, a dietetikusunk</b><p>Heti személyes válasz a kérdéseidre, a megosztott naplód alapján.</p><span class="inst">amit egy app önmagában nem tud</span></div></div>
+    </div>
+    <p class="disclaimer">*Ezek dietetikus által összeállított <b>mintaétrendek</b>, nem gyógyászati célú étrendi kezelés, és nem helyettesítik a kezelőorvosod vagy dietetikusod személyre szabott utasításait. Ha diagnosztizált betegséged van, vagy gyógyszert szedsz, a bevezetésük előtt egyeztess a kezelőorvosoddal.</p>
+  </div>
+</section>
+
+<!-- 7 · ÁR -->
+<section class="blk bg-green" id="ar">
+  <div class="wrap">
+    <div class="eyebrow">Az ajánlat</div>
+    <h2 class="sec">Zia Prémium — <em>három hónapra</em></h2>
+    <p class="sec-lead">8 910 Ft, benne Bori válaszaival a kérdéseidre. Ha itt fizetsz elő, <b>10%-kal olcsóbb</b>, mint az app-áruházban.</p>
+
+    <div class="offer-card">
+      <h3>3 hónap Zia Prémium <b>limitek nélkül</b></h3>
+      <ul class="stack">
+        <li class="hi"><span class="c"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-check"></use></svg></span><div><b>Bori, a dietetikusunk válaszol</b><small>A megosztott naplód alapján, személyesen, 72 órán belül.</small></div></li>
+        <li><span class="c"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-check"></use></svg></span><div><b>Korlátlan fotós naplózás + napi visszajelzés</b><small>Lefotózod, Zia felismeri és beírja — és minden nap érthetően összegez.</small></div></li>
+        <li><span class="c"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-check"></use></svg></span><div><b>Étrendtervező + automatikus bevásárlólista</b><small>Dietetikusi mintaétrendek öt élethelyzetre, vagy a sajátod.</small></div></li>
+        <li><span class="c"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-check"></use></svg></span><div><b>Okoseszköz- és CGM-szinkron</b><small>Apple Health, Google Health Connect, Samsung Health, Syai és Linx szenzorok.</small></div></li>
+        <li><span class="c"><svg class="zia-icon" aria-hidden="true" focusable="false"><use href="#zia-check"></use></svg></span><div><b>3 000+ magyar recept és edzések</b><small>Dietetikus által ellenőrizve, folyamatosan bővülő adatbázisból.</small></div></li>
+      </ul>
+      <div class="price">
+        <span class="old">9 900 Ft</span>
+        <span class="new">8 910 <small>Ft</small></span>
+        <span class="save">−10%</span>
+      </div>
+      <p class="price-day">3 hónap, egy fizetéssel · <b>≈ 2 970 Ft / hó</b> — kevesebb, mint 100 Ft naponta</p>
+      <a href="https://zia.merovahealth.com/hu/auth/sign-up?package=zia_3m_2&amp;promo=WEBCOUPON" class="btn btn-coral">Előfizetek — 8 910 Ft / 3 hónap →</a>
+      <p class="transp">Biztonságos bankkártyás fizetés a Stripe felületén<span class="sep">·</span>Bármikor lemondható</p>
+    </div>
+    <p class="price-note">A feltüntetett árak bruttó árak, a mindenkori áfát tartalmazzák. A 10% kedvezmény a 9 900 Ft-os listaárra vonatkozik, és az online, weben indított előfizetésre érvényes. Az előfizetésed 3 havonta automatikusan megújul, amíg le nem mondod. Az elállási jogodról az <a href="https://zia.merovahealth.com/hu/aszf" style="text-decoration:underline">ÁSZF</a>-ben találsz tájékoztatást.</p>
+  </div>
+</section>
+
+<!-- 8 · HOGYAN INDULSZ + KINEK NEM VALÓ -->
+<section class="blk bg-white" id="hogyan">
+  <div class="wrap steps-wrap">
+    <div class="eyebrow">Így indulsz el</div>
+    <h2 class="sec"><em>4 lépés</em>, és kész is vagy</h2>
+    <div class="steps" style="margin-top:26px">
+      <div class="step"><div class="num">1</div><div><b>Regisztrálj</b><p>Add meg az adataid, és hozd létre a fiókod — pár mező az egész.</p></div></div>
+      <div class="step"><div class="num">2</div><div><b>Fizess elő online</b><p>Biztonságos bankkártyás fizetés a Stripe felületén — a hozzáférésed azonnal él.</p></div></div>
+      <div class="step"><div class="num">3</div><div><b>Töltsd le a Zia appot</b><p>iOS vagy Android — jelentkezz be ugyanazzal az e-mail-címmel, amivel regisztráltál.</p></div></div>
+      <div class="step"><div class="num">4</div><div><b>Kösd össze az adataid <span style="font-weight:500;color:var(--grey-d)">(opcionális)</span></b><p>Apple Health, Google Health Connect, Samsung Health vagy CGM-szenzor. Enélkül is teljes értékű: a fotó-naplózáshoz elég a telefonod.</p></div></div>
+    </div>
+    <div class="store-badges">
+      <a href="https://apps.apple.com/hu/app/zia/id6753936060" target="_blank" rel="noreferrer"><img src="https://zia.merovahealth.com/assets/img/appstore.svg" alt="Letöltés az App Store-ból" /></a>
+      <a href="https://play.google.com/store/apps/details?id=com.merovahealth.zia" target="_blank" rel="noreferrer"><img src="https://zia.merovahealth.com/assets/img/googleplay.svg" alt="Letöltés a Google Play áruházból" /></a>
+    </div>
+
+    <div class="notfor">
+      <h3>Zia nem neked való, ha…</h3>
+      <ul>
+        <li>gyors fogyást ígérő módszert keresel;</li>
+        <li>1-es típusú cukorbeteg vagy, és inzulinadagoláshoz keresel eszközt;</li>
+        <li>orvosi kezelést szeretnél helyettesíteni vele;</li>
+        <li>nem szeretnéd lefotózni, amit eszel — ez az alapja mindennek.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ZÁRÓ CTA -->
+<section class="final">
+  <div class="wrap">
+    <h2>Kezdd el <span class="hl">még ma</span></h2>
+    <p>Sokszor elkezdted már? Ezúttal van, aki minden nap visszajelez, és van, akitől kérdezhetsz.</p>
+    <div class="fcta">
+      <a href="https://zia.merovahealth.com/hu/auth/sign-up?package=zia_3m_2&amp;promo=WEBCOUPON" class="btn btn-coral">Belevágok Ziával →</a>
+      <a href="#het" class="btn btn-ghost" style="border-color:rgba(255,255,255,.3);color:#fff">Megnézem, hogyan működik</a>
+    </div>
+    <p class="micro">3 hónap · 8 910 Ft · biztonságos fizetés · iOS &amp; Android · bármikor lemondható</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ft">
+  <div class="wrap ft-in">
+    <div class="ft-logos">
+      <img class="zia" src="https://zia.merovahealth.com/assets/img/zia-logo/Zia-Logo-Negative.svg" alt="Zia" />
+    </div>
+    <div style="display:flex;gap:18px;flex-wrap:wrap">
+      <a href="https://zia.merovahealth.com/hu/adatkezelesi">Adatkezelés</a>
+      <a href="https://zia.merovahealth.com/hu/aszf">ÁSZF</a>
+      <a href="https://merovahealth.com/hu/contact">Kapcsolat</a>
+      <a href="https://zia.merovahealth.com/hu/pricing">Árak</a>
+    </div>
+  </div>
+  <p class="ft-note">Zia egy egészség-coach alkalmazás (MEROVA Health Zrt.), nem orvosi eszköz és nem helyettesíti a szakorvosi vagy dietetikai ellátást. Krónikus betegség esetén a kezelésed mellett támogat, nem helyette — kérd ki a kezelőorvosod tanácsát.</p>
+  <p class="impressum">MEROVA Health Zártkörűen Működő Részvénytársaság · székhely: 1112 Budapest, Hosszúréti utca 32. Fsz. 2. ajtó · cégjegyzékszám: 01-10-142395 (Fővárosi Törvényszék Cégbírósága) · adószám: 32306044-2-43 · e-mail: office@merovahealth.com · telefon: +36 30 524 3657 · © MEROVA Health Zrt.</p>
+</footer>
+
+<!-- STICKY MOBIL CTA -->
+<a class="sticky-cta" href="https://zia.merovahealth.com/hu/auth/sign-up?package=zia_3m_2&amp;promo=WEBCOUPON">
+  <span class="px"><b>Életmódot váltani egyedül nehéz.</b><small>Mi itt vagyunk Neked! ❤️</small></span>
+  <span class="btn btn-coral">Belevágok Ziával</span>
+</a>
+
+
+
+<script>
+/* Az első heted — slider: automata léptetés, nyilak, lépés-gombok, swipe. */
+(function(){
+  var track=document.querySelector('.wtrack'); if(!track) return;
+  var box=document.querySelector('.wslider'),
+      slides=[].slice.call(track.querySelectorAll('.wslide')),
+      steps=[].slice.call(document.querySelectorAll('.wstep')),
+      dots=[].slice.call(document.querySelectorAll('.wdots i')),
+      prev=document.querySelector('.warrow.prev'),
+      next=document.querySelector('.warrow.next');
+  if(slides.length<2) return;
+
+  /* pozíció a tényleges elem-eltolásból — nem clientWidth-ből,
+     így a gap és a padding nem csúsztatja el a nagyobb indexeknél */
+  function pos(i){ return slides[i].offsetLeft - slides[0].offsetLeft; }
+  function idx(){
+    var best=0,bd=Infinity;
+    for(var i=0;i<slides.length;i++){ var d=Math.abs(pos(i)-track.scrollLeft); if(d<bd){bd=d;best=i;} }
+    return best;
+  }
+  function go(i){
+    i=(i+slides.length)%slides.length;
+    track.scrollTo({left:pos(i),behavior:'smooth'});
+  }
+  function sync(){
+    var i=idx();
+    steps.forEach(function(s,n){ s.setAttribute('aria-selected', n===i?'true':'false'); });
+    dots.forEach(function(d,n){ d.classList.toggle('on', n===i); });
+    prev.disabled = stopped && i===0;
+    next.disabled = stopped && i===slides.length-1;
+  }
+
+  var DELAY=4500, timer=null, stopped=false, onScreen=false,
+      reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  function play(){
+    stop();
+    if(stopped||reduce||!onScreen) return;
+    timer=setInterval(function(){ go(idx()+1); },DELAY);
+  }
+  function halt(){ stopped=true; stop(); sync(); }   /* a látogató vette át az irányítást */
+
+  steps.forEach(function(s){ s.addEventListener('click',function(){ halt(); go(+s.dataset.go); }); });
+  prev.addEventListener('click',function(){ halt(); go(idx()-1); });
+  next.addEventListener('click',function(){ halt(); go(idx()+1); });
+
+  /* egérrel megáll, ha fölé viszik — érintőn ilyen nincs, ezért csak hover-képes eszközön */
+  if(window.matchMedia && window.matchMedia('(hover: hover)').matches){
+    box.addEventListener('mouseenter',stop);
+    box.addEventListener('mouseleave',play);
+  }
+  box.addEventListener('focusin',stop);
+  box.addEventListener('focusout',play);
+
+  /* érintés: az ujj alatt szünetel, de csak VALÓDI vízszintes húzás állítja le véglegesen —
+     a függőleges görgetés vagy egy koppintás nem */
+  var tx=null,ty=null;
+  track.addEventListener('touchstart',function(e){
+    var t=e.touches[0]; tx=t.clientX; ty=t.clientY; stop();
+  },{passive:true});
+  track.addEventListener('touchend',function(e){
+    var t=e.changedTouches[0], dx=tx===null?0:t.clientX-tx, dy=ty===null?0:t.clientY-ty;
+    if(Math.abs(dx)>30 && Math.abs(dx)>Math.abs(dy)) halt(); else play();
+    tx=ty=null;
+  },{passive:true});
+
+  document.addEventListener('visibilitychange',function(){ document.hidden?stop():play(); });
+
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      onScreen=es[0].isIntersecting; onScreen?play():stop();
+    },{threshold:.25}).observe(box);
+  } else { onScreen=true; play(); }
+
+  var t; track.addEventListener('scroll',function(){ clearTimeout(t); t=setTimeout(sync,90); });
+  window.addEventListener('resize',sync);
+  sync();
+})();
+</script>
+
+</body>
+</html>
